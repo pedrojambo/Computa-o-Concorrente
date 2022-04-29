@@ -6,7 +6,10 @@
 
 float *mat; //matriz de entrada
 float *mat2; //matriz de entrada
-float *saida; //matriz de saida
+float *saida1; //matriz de saida
+float *mat3; //matriz de entrada
+float *mat4; //matriz de entrada
+float *saida2; //matriz de saida
 int nthreads; //numero de threads
 
 typedef struct{
@@ -20,7 +23,7 @@ void * tarefa(void *arg) {
    //printf("Thread %d\n", args->id);
    for(int i=args->id; i<args->dim; i+=nthreads)
       for(int j=0; j<args->dim; j++) 
-         saida[i*(args->dim) + j] += mat[i*(args->dim) + j] * mat2[i*(args->dim)+j];
+         saida1[i*(args->dim) + j] += mat[i*(args->dim) + j] * mat2[i*(args->dim)+j];
    pthread_exit(NULL);
 }
 
@@ -41,25 +44,46 @@ int main(int argc, char* argv[]) {
    nthreads = atoi(argv[2]);
    if (nthreads > dim) nthreads=dim;
 
-   //alocacao de memoria para as estruturas de dados
+   //alocacao de memoria para as estruturas de dados para a multiplicação sequencial e concorrente
    mat = (float *) malloc(sizeof(float) * dim * dim);
    if (mat == NULL) {printf("ERRO--malloc\n"); return 2;}
    mat2 = (float *) malloc(sizeof(float) * dim * dim);
    if (mat2 == NULL) {printf("ERRO--malloc\n"); return 2;}
-   saida = (float *) malloc(sizeof(float) * dim * dim);
-   if (saida == NULL) {printf("ERRO--malloc\n"); return 2;}
+   saida1 = (float *) malloc(sizeof(float) * dim * dim);
+   if (saida1 == NULL) {printf("ERRO--malloc\n"); return 2;}
+   mat3 = (float *) malloc(sizeof(float) * dim * dim);
+   if (mat == NULL) {printf("ERRO--malloc\n"); return 2;}
+   mat4 = (float *) malloc(sizeof(float) * dim * dim);
+   if (mat2 == NULL) {printf("ERRO--malloc\n"); return 2;}
+   saida2= (float *) malloc(sizeof(float) * dim * dim);
+   if (saida2 == NULL) {printf("ERRO--malloc\n"); return 2;}
 
    //inicializacao das estruturas de dados de entrada e saida
+   srand(time(NULL));  
    for(int i=0; i<dim; i++) {
       for(int j=0; j<dim; j++){
-         mat[i*dim+j] = 1;    //equivalente mat[i][j]
-         mat2[i*dim+j] = 1;
-         saida[i*dim+j] = 0;
+         int rand1 = rand();
+         int rand2 = rand();
+         mat[i*dim+j] = rand1;    //equivalente mat[i][j]
+         mat2[i*dim+j] = rand2;
+         mat3[i*dim+j] = rand1; 
+         mat4[i*dim+j] = rand2;
+         saida1[i*dim+j] = 0;
+         saida2[i*dim+j] = 0;
         } 
    }
+
+   //multiplicacao sequencial
+
+   for(int i=0; i<dim; i++)
+      for(int j=0; j<dim; j++) 
+         saida2[i*dim + j] += mat3[i*dim + j] * mat4[i*dim + j];
+      
+   
+
    GET_TIME(fim);
    delta = fim - inicio;
-   //printf("Tempo inicializacao:%lf\n", delta);
+   printf("Tempo inicializacao:%lf\n", delta);
 
    //multiplicacao da matriz por matriz
    GET_TIME(inicio);
@@ -84,24 +108,29 @@ int main(int argc, char* argv[]) {
    delta = fim - inicio;
    printf("Tempo multiplicacao:%lf\n", delta);
 
-   //exibicao dos resultados
-   puts("matriz de saida:");
-   for(int i=0; i<dim; i++)
-        for(int j=0; j<dim; j++)
-            printf("%.1f ", saida[i*dim+j]);
-   puts("");
-   
+
+   //teste de resultado com saida1 e saida2
+   int C = 0;
+   for(int i=0; i<dim; i++){
+      for(int j=0; j<dim; j++){ 
+         if(saida1[i*dim + j] != saida2[i*dim + j]){
+            C++;
+         }
+      }
+   }
+   printf("\nERROS: %d", C );
+
 
    //liberacao da memoria
-   GET_TIME(inicio);
    free(mat);
    free(mat2);
-   free(saida);
+   free(saida1);
+   free(mat3);
+   free(mat4);
+   free(saida2);
    free(args);
    free(tid);
    GET_TIME(fim)   
-   delta = fim - inicio;
-   //printf("Tempo finalizacao:%lf\n", delta);
 
    return 0;
 }
