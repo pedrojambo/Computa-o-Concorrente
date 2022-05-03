@@ -61,7 +61,7 @@ int main(int argc, char *argv[]) {
       if(vetor[i]<menorSequencial) menorSequencial = vetor[i];
     }
    GET_TIME(fim);
-   printf("Tempo sequencial:  %lf\n", fim-ini);
+   printf("\nTempo sequencial:  %lf\n", fim-ini);
 
    //soma concorrente dos elementos
    GET_TIME(ini);
