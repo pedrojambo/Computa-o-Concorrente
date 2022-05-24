@@ -1,3 +1,14 @@
 Detalhes da modificação:
 
+Para que fosse alcançada uma prioridade para os escritores, é necessária uma variável global 
+que incremente quando um escritor entra no estado "quer escrever". Essa variável tem como 
+nome "quer_escr" e será incrementada no início da função "InicEscr" logo após o lock, e 
+decrementada após a variável "escr" for increntada, o que sinaliza para o programa que o escritor
+começou a escrever. Assim, basta realizarmos uma checagem no while da função "InicLeit". 
+Enquanto o número de escritores que querem ler forem maiores que 0, o leitor entrará em espera.
+Além disso, na função "FimEscr", adicionamos uma checagem "if(quer_escr==0)" antes de executarmos
+o broadcast para os leitores na fila. Assim, os leitores não serão desbloqueados caso existam
+escritores na fila. Isso é importante para que os leitores não sejam desbloqueados apenas para
+serem bloqueados novamente.
+
 
