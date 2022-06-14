@@ -1,0 +1,37 @@
+Atividade 1.
+
+Programa: HelloThread.java
+Há mudanças na ordem de execução? Por que isso ocorre?
+Sim, pois faltam mecanismos de sincronização para as threads, deixando uma condição de corrida no código, na qual o resultado final depende da velocidade de cada thread em terminar.
+
+Qual alteração na execução da aplicação pode ser observada e por que ela ocorre?
+Agora, visto que a main espera a conclusão das threads, a mensagem "terminou" só aparece após a execução de todas as threads.
+
+
+Atividade 2.
+
+Programa: OlaThread.java
+Quais são as diferenças entre esse programa e o programa HelloThread.java?
+Ao invés de utilizar um objeto que implementa "runnable" e transforma-lo em Thread, o programa OlaThread.java cria threads da classe que estende "Thread" (não temos objeto runnable, e sim a classe ola que extende "Thread".
+
+
+Atividade 3.
+
+Programa: TIncrementoBase.java
+Qual a seção crítica do código? Qual saída é esperada para o programa(s)?
+A seção crítica do código é a tarefa da Thread, onde o valor de S é alterado por todas as threads.
+
+Os valores impressos foram sempre o valor esperado? Por que?
+Não, pois o programa não utiliza "synchronized" nos métodos do recurso compartilhado entre as threads, não utilizando nenhum tipo de métodos para garantir a exclusão mútua, gerando uma condição de corrida.
+
+
+Atividade 4.
+
+Programa: TIncrementoBase.java
+Os valores impressos foram sempre o valor esperado? Por que?
+Sim, pois no código foram utilizado mecanismos de exclusão mútua. Nos métodos em que a variável compartilhada era acessada, foi utilizado "synchronized".
+
+Atividade 5.
+(código)
+
+
