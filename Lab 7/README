@@ -32,6 +32,7 @@ Os valores impressos foram sempre o valor esperado? Por que?
 Sim, pois no código foram utilizado mecanismos de exclusão mútua. Nos métodos em que a variável compartilhada era acessada, foi utilizado "synchronized".
 
 Atividade 5.
+
 A exclusão mútua é garantida através da utilização de "synchronized" na função responsável por incrementar o número de números pares após detecção. As threads pode ler ao mesmo tempo, porém não podem registrar os incrementos ao mesmo tempo.
 
 
