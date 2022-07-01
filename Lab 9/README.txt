@@ -1,0 +1,1 @@
+Programa simples semelhante ao laboratório 5, porém utilizando semáforos para garantir a exclusão mútua, bem como a ordem de execução das threads que foi combinada.
